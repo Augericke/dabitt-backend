@@ -1,0 +1,24 @@
+{
+  "name": "dabitt-backend",
+  "version": "1.0.0",
+  "description": "Backend for dabitt - the daily habit app",
+  "main": "index.ts",
+  "scripts": {
+    "devStart": "nodemon index.ts"
+  },
+  "author": "augericke",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.7.18",
+    "nodemon": "^2.0.20",
+    "prisma": "^4.3.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1"
+  }
+}
