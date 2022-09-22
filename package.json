@@ -6,6 +6,9 @@
   "scripts": {
     "devStart": "nodemon index.ts"
   },
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
+  },
   "author": "augericke",
   "license": "MIT",
   "devDependencies": {
