@@ -11,10 +11,7 @@ router.put("/", categoryController.createCategory);
 //////////
 // Read //
 //////////
-// Get all categories
 router.get("/", categoryController.getCategories);
-
-// Get specific category
 router.get("/:id", categoryController.getCategory);
 
 // Get all categories and tasks for a specific user

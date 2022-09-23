@@ -37,6 +37,7 @@ model Category {
   @@unique([userId, name])
 }
 
+// TODO: add sub tasks using self reference
 model Task {
   id          String    @id @default(uuid())
   description String

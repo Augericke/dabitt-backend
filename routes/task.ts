@@ -6,28 +6,23 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-// router.put("/", userController.createUser);
+router.put("/", taskController.createTask);
 
 //////////
 // Read //
 //////////
-// router.get("/", userController.getUsers);
-
-// router.get("/:id", userController.getUser);
-
-// Get just a users preferences
-// router.get("/preference/:id", userController.getUserPreference);
+router.get("/", taskController.getTasks);
+router.get("/:id", taskController.getTask);
+router.get("/user/:userId", taskController.getUsersTasks);
 
 ////////////
 // Update //
 ////////////
-// router.put("/:id", userController.updateUser);
-
-// router.put("/preference/:id", userController.updateUserPreference);
+router.put("/:id", taskController.updateTask);
 
 ////////////
 // Delete //
 ////////////
-// router.delete("/:id", userController.deleteUser);
+router.delete("/:id", taskController.deleteTask);
 
 export = router;
