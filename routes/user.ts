@@ -1,5 +1,4 @@
-import express, { Request, Response } from "express";
-import user from "../controllers/user";
+import express from "express";
 import userController from "../controllers/user";
 
 const router = express.Router();
@@ -28,6 +27,7 @@ router.put("/:id", userController.updateUser);
 ////////////
 // Delete //
 ////////////
+// Cascading deletes all data related to a user (i.e preferences / categories / tasks / etc...)
 router.delete("/:id", userController.deleteUser);
 
 export = router;
