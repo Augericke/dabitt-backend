@@ -11,18 +11,18 @@ datasource db {
 }
 
 model User {
-  id               String          @id @default(uuid())
-  username         String
-  userPreference   UserPreference? @relation(fields: [userPreferenceId], references: [id])
-  userPreferenceId String?         @unique
-  tasks            Task[]
-  categories       Category[]
+  id             String          @id @default(uuid())
+  username       String
+  userPreference UserPreference?
+  tasks          Task[]
+  categories     Category[]
 }
 
 model UserPreference {
   id            String @id @default(uuid())
   preferedTheme Theme  @default(CLASSIC)
-  user          User?
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String @unique
 }
 
 model Category {

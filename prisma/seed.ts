@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "../utils/prisma";
 
 async function main() {
   await prisma.user.createMany({
@@ -15,6 +14,23 @@ async function main() {
       {
         id: "bh11cva51",
         username: "hank",
+      },
+    ],
+  });
+
+  await prisma.userPreference.createMany({
+    data: [
+      {
+        userId: "asf31cvz21",
+        preferedTheme: "CLASSIC",
+      },
+      {
+        userId: "as11cva1asd",
+        preferedTheme: "CLASSIC",
+      },
+      {
+        userId: "bh11cva51",
+        preferedTheme: "DARK",
       },
     ],
   });

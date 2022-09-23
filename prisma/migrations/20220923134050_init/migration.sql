@@ -5,7 +5,6 @@ CREATE TYPE "Theme" AS ENUM ('CLASSIC', 'DARK');
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
-    "userPreferenceId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -14,6 +13,7 @@ CREATE TABLE "User" (
 CREATE TABLE "UserPreference" (
     "id" TEXT NOT NULL,
     "preferedTheme" "Theme" NOT NULL DEFAULT 'CLASSIC',
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "UserPreference_pkey" PRIMARY KEY ("id")
 );
@@ -43,13 +43,13 @@ CREATE TABLE "Task" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_userPreferenceId_key" ON "User"("userPreferenceId");
+CREATE UNIQUE INDEX "UserPreference_userId_key" ON "UserPreference"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Category_userId_name_key" ON "Category"("userId", "name");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_userPreferenceId_fkey" FOREIGN KEY ("userPreferenceId") REFERENCES "UserPreference"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPreference" ADD CONSTRAINT "UserPreference_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Category" ADD CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

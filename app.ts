@@ -1,16 +1,18 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { unknownEndpoint, errorHandler } from "./utils/errorHandlers";
+require("express-async-errors");
+
+import userRouter from "./routes/user";
 
 const app: Express = express();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get("/", (req: Request, res: Response) => {
-  res.send("hello dabitt");
-});
+app.use("/api/user", userRouter);
 
 // Error Handling
 app.use(unknownEndpoint);
