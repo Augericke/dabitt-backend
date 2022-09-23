@@ -20,11 +20,10 @@ const createUser = async (req: Request, res: Response) => {
 
 const getUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      username: true,
+    include: {
       userPreference: {
         select: {
+          id: true,
           preferedTheme: true,
         },
       },
@@ -37,9 +36,7 @@ const getUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const user = await prisma.user.findUnique({
-    select: {
-      id: true,
-      username: true,
+    include: {
       userPreference: {
         select: {
           preferedTheme: true,
@@ -51,6 +48,18 @@ const getUser = async (req: Request, res: Response) => {
     },
   });
   res.json(user);
+};
+
+const getUserPreference = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const preference = await prisma.userPreference.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  res.json(preference);
 };
 
 const updateUser = async (req: Request, res: Response) => {
@@ -67,6 +76,21 @@ const updateUser = async (req: Request, res: Response) => {
   });
 
   res.json(updatedUser);
+};
+
+const updateUserPreference = async (req: Request, res: Response) => {
+  const { preferedTheme } = req.body;
+  const { id } = req.params;
+
+  const updatedPreferences = await prisma.userPreference.update({
+    where: {
+      id,
+    },
+    data: {
+      preferedTheme,
+    },
+  });
+  res.json(updatedPreferences);
 };
 
 const deleteUser = async (req: Request, res: Response) => {
@@ -108,4 +132,12 @@ const deleteUser = async (req: Request, res: Response) => {
   res.json(transaction);
 };
 
-export default { createUser, getUsers, getUser, updateUser, deleteUser };
+export default {
+  createUser,
+  getUsers,
+  getUser,
+  getUserPreference,
+  updateUser,
+  updateUserPreference,
+  deleteUser,
+};
