@@ -4,6 +4,7 @@ import { unknownEndpoint, errorHandler } from "./utils/errorHandlers";
 require("express-async-errors");
 
 import userRouter from "./routes/user";
+import categoryRouter from "./routes/category";
 
 const app: Express = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/user", userRouter);
+app.use("/api/category", categoryRouter);
 
 // Error Handling
 app.use(unknownEndpoint);
