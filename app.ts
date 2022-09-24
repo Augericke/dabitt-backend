@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { unknownEndpoint, errorHandler } from "./utils/errorHandlers";
-require("express-async-errors");
+import { checkJwt } from "./utils/auth0";
 
 import userRouter from "./routes/user";
 import categoryRouter from "./routes/category";
@@ -17,6 +17,10 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/task", taskRouter);
+
+app.get("/authorized", checkJwt, function (req, res) {
+  res.send("Secured Resource");
+});
 
 // Error Handling
 app.use(unknownEndpoint);
