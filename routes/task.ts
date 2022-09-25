@@ -6,7 +6,7 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-router.put("/", taskController.createTask);
+router.post("/", taskController.createTask);
 
 //////////
 // Read //

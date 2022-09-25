@@ -2,10 +2,15 @@ import { Request, Response } from "express";
 import prisma from "../utils/prisma";
 
 const createUser = async (req: Request, res: Response) => {
-  const { username } = req.body;
+  const { id, username } = req.body;
 
-  const newUser = await prisma.user.create({
-    data: {
+  const newUser = await prisma.user.upsert({
+    where: {
+      id,
+    },
+    update: {},
+    create: {
+      id,
       username,
       userPreference: {
         create: {

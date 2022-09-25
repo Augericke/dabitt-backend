@@ -6,7 +6,7 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-router.put("/", categoryController.createCategory);
+router.post("/", categoryController.createCategory);
 
 //////////
 // Read //

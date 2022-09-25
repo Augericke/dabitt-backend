@@ -7,7 +7,7 @@ const router = express.Router();
 // Create //
 ////////////
 // Create new user with default preferences
-router.put("/", userController.createUser);
+router.post("/", userController.createUser);
 
 //////////
 // Read //
