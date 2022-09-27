@@ -34,7 +34,9 @@ const getUsersCategories = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   const usersCategories = await prisma.category.findMany({
-    include: {
+    select: {
+      id: true,
+      name: true,
       tasks: {
         select: {
           id: true,

@@ -6,13 +6,13 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-router.post("/", categoryController.createCategory);
+// router.post("/", categoryController.createCategory);
 
 //////////
 // Read //
 //////////
-router.get("/", categoryController.getCategories);
-router.get("/:id", categoryController.getCategory);
+// router.get("/", categoryController.getCategories);
+// router.get("/:id", categoryController.getCategory);
 
 // Get all categories and tasks for a specific user
 router.get("/user/:userId", categoryController.getUsersCategories);
@@ -20,12 +20,12 @@ router.get("/user/:userId", categoryController.getUsersCategories);
 ////////////
 // Update //
 ////////////
-router.put("/:id", categoryController.updateCategory);
+// router.put("/:id", categoryController.updateCategory);
 
 ////////////
 // Delete //
 ////////////
 // Cascading deletes all data related to a category (i.e tasks)
-router.delete("/:id", categoryController.deleteCategory);
+// router.delete("/:id", categoryController.deleteCategory);
 
 export = router;
