@@ -5,14 +5,17 @@ async function main() {
     data: [
       {
         id: "asf31cvz21",
+        completedSetup: false,
         username: "augericke",
       },
       {
         id: "as11cva1asd",
+        completedSetup: false,
         username: "ted",
       },
       {
         id: "bh11cva51",
+        completedSetup: false,
         username: "hank",
       },
     ],
@@ -22,15 +25,15 @@ async function main() {
     data: [
       {
         userId: "asf31cvz21",
-        preferedTheme: "CLASSIC",
+        preferedTheme: "light",
       },
       {
         userId: "as11cva1asd",
-        preferedTheme: "CLASSIC",
+        preferedTheme: "dark",
       },
       {
         userId: "bh11cva51",
-        preferedTheme: "DARK",
+        preferedTheme: "lobby",
       },
     ],
   });

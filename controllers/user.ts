@@ -11,10 +11,11 @@ const createUser = async (req: Request, res: Response) => {
     update: {},
     create: {
       id,
+      completedSetup: false,
       username,
       userPreference: {
         create: {
-          preferedTheme: "CLASSIC",
+          preferedTheme: "light",
         },
       },
     },
@@ -38,7 +39,7 @@ const getUsers = async (req: Request, res: Response) => {
 };
 
 const getUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   const user = await prisma.user.findUnique({
     include: {
@@ -56,7 +57,7 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 const getUserPreference = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   const preference = await prisma.userPreference.findUnique({
     where: {
@@ -68,38 +69,27 @@ const getUserPreference = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-  const { username } = req.body;
-  const { id } = req.params;
-
+  const { id, completedSetup, username, preferedTheme } = req.body;
   const updatedUser = await prisma.user.update({
     where: {
       id,
     },
     data: {
+      completedSetup,
       username,
+      userPreference: {
+        update: {
+          preferedTheme,
+        },
+      },
     },
   });
 
   res.json(updatedUser);
 };
 
-const updateUserPreference = async (req: Request, res: Response) => {
-  const { preferedTheme } = req.body;
-  const { id } = req.params;
-
-  const updatedPreferences = await prisma.userPreference.update({
-    where: {
-      id,
-    },
-    data: {
-      preferedTheme,
-    },
-  });
-  res.json(updatedPreferences);
-};
-
 const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   const deletedTasks = prisma.category.deleteMany({
     where: {
@@ -143,6 +133,5 @@ export default {
   getUser,
   getUserPreference,
   updateUser,
-  updateUserPreference,
   deleteUser,
 };

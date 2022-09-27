@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id             String          @id @default(uuid())
+  completedSetup Boolean         @default(false)
   username       String
   userPreference UserPreference?
   tasks          Task[]
@@ -20,7 +21,7 @@ model User {
 
 model UserPreference {
   id            String @id @default(uuid())
-  preferedTheme Theme  @default(CLASSIC)
+  preferedTheme Theme  @default(light)
   user          User   @relation(fields: [userId], references: [id])
   userId        String @unique
 }
@@ -51,6 +52,7 @@ model Task {
 }
 
 enum Theme {
-  CLASSIC
-  DARK
+  light
+  dark
+  lobby
 }

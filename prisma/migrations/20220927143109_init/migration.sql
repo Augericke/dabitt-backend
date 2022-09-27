@@ -1,9 +1,10 @@
 -- CreateEnum
-CREATE TYPE "Theme" AS ENUM ('CLASSIC', 'DARK');
+CREATE TYPE "Theme" AS ENUM ('light', 'dark', 'lobby');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "completedSetup" BOOLEAN NOT NULL DEFAULT false,
     "username" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -12,7 +13,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "UserPreference" (
     "id" TEXT NOT NULL,
-    "preferedTheme" "Theme" NOT NULL DEFAULT 'CLASSIC',
+    "preferedTheme" "Theme" NOT NULL DEFAULT 'light',
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "UserPreference_pkey" PRIMARY KEY ("id")

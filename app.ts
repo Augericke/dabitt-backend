@@ -14,13 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/user", checkJwt, userRouter);
+app.use("/api/user", userRouter);
 app.use("/api/category", checkJwt, categoryRouter);
 app.use("/api/task", checkJwt, taskRouter);
-
-app.get("/authorized", checkJwt, function (req, res) {
-  res.send("Secured Resource");
-});
 
 // Error Handling
 app.use(unknownEndpoint);
