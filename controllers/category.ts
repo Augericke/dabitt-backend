@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createCategory = async (req: Request, res: Response) => {
-  const { name, userId } = req.body;
+  const { name } = req.body;
+  const userId = getUserId(req);
 
   const newCategory = await prisma.category.create({
     data: {
@@ -31,8 +33,7 @@ const getCategory = async (req: Request, res: Response) => {
 };
 
 const getUsersCategories = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
+  const userId = getUserId(req);
   const usersCategories = await prisma.category.findMany({
     select: {
       id: true,

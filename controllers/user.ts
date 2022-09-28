@@ -15,6 +15,11 @@ const createUser = async (req: Request, res: Response) => {
       id: userId,
       completedSetup: false,
       username,
+      categories: {
+        createMany: {
+          data: [{ name: "personal" }, { name: "work" }],
+        },
+      },
       userPreference: {
         create: {
           preferedTheme: "light",

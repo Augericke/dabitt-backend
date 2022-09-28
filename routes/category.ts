@@ -6,7 +6,7 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-// router.post("/", categoryController.createCategory);
+router.post("/", categoryController.createCategory);
 
 //////////
 // Read //
@@ -15,7 +15,7 @@ const router = express.Router();
 // router.get("/:id", categoryController.getCategory);
 
 // Get all categories and tasks for a specific user
-router.get("/user/:userId", categoryController.getUsersCategories);
+router.get("/user", categoryController.getUsersCategories);
 
 ////////////
 // Update //
