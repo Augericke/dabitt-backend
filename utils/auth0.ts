@@ -1,4 +1,5 @@
 import { auth } from "express-oauth2-jwt-bearer";
+import { Request } from "express";
 import { requiredScopes } from "express-oauth2-jwt-bearer";
 
 // Authorization middleware. When used, the Access Token must
@@ -9,3 +10,8 @@ export const checkJwt = auth({
 });
 
 export const checkReadMessage = requiredScopes("read:messages");
+
+//TODO: this was a quick hack  rewrite later
+export const getUserId = (request: Request) => {
+  return request.auth?.payload.sub!.replace("|", "-") ?? "";
+};

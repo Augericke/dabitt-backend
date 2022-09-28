@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
+import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createUser = async (req: Request, res: Response) => {
-  const { id, username } = req.body;
+  const { username } = req.body;
+  const userId = getUserId(req);
 
   const newUser = await prisma.user.upsert({
     where: {
-      id,
+      id: userId,
     },
     update: {},
     create: {
-      id,
+      id: userId,
       completedSetup: false,
       username,
       userPreference: {
@@ -39,7 +41,7 @@ const getUsers = async (req: Request, res: Response) => {
 };
 
 const getUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const userId = getUserId(req);
 
   const user = await prisma.user.findUnique({
     include: {
@@ -50,18 +52,18 @@ const getUser = async (req: Request, res: Response) => {
       },
     },
     where: {
-      id,
+      id: userId,
     },
   });
   res.json(user);
 };
 
 const getUserPreference = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const userId = getUserId(req);
 
   const preference = await prisma.userPreference.findUnique({
     where: {
-      id,
+      id: userId,
     },
   });
 
@@ -69,10 +71,12 @@ const getUserPreference = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-  const { id, completedSetup, username, preferedTheme } = req.body;
+  const { completedSetup, username, preferedTheme } = req.body;
+  const userId = getUserId(req);
+
   const updatedUser = await prisma.user.update({
     where: {
-      id,
+      id: userId,
     },
     data: {
       completedSetup,
@@ -89,29 +93,29 @@ const updateUser = async (req: Request, res: Response) => {
 };
 
 const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const userId = getUserId(req);
 
   const deletedTasks = prisma.category.deleteMany({
     where: {
-      userId: id,
+      userId,
     },
   });
 
   const deletedCategories = prisma.category.deleteMany({
     where: {
-      userId: id,
+      userId,
     },
   });
 
   const deletedPreferences = prisma.userPreference.delete({
     where: {
-      userId: id,
+      userId,
     },
   });
 
   const deletedUser = prisma.user.delete({
     where: {
-      id,
+      id: userId,
     },
   });
 

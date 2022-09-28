@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/user", userRouter);
+app.use("/api/user", checkJwt, userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/task", taskRouter);
 

@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createTask = async (req: Request, res: Response) => {
-  const { description, categoryId, userId } = req.body;
+  const { description, categoryId } = req.body;
+  const userId = getUserId(req);
 
   const newTask = await prisma.task.create({
     data: {
@@ -32,7 +34,7 @@ const getTask = async (req: Request, res: Response) => {
 };
 
 const getUsersTasks = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const userId = getUserId(req);
 
   const usersTasks = await prisma.task.findMany({
     where: {
