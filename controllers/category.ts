@@ -58,7 +58,7 @@ const updateCategory = async (req: Request, res: Response) => {
   const { name } = req.body;
   const { id } = req.params;
 
-  const updatedUser = await prisma.category.update({
+  const updatedCategory = await prisma.category.update({
     where: {
       id,
     },
@@ -67,7 +67,7 @@ const updateCategory = async (req: Request, res: Response) => {
     },
   });
 
-  res.json(updatedUser);
+  res.json(updatedCategory);
 };
 
 const deleteCategory = async (req: Request, res: Response) => {

@@ -20,7 +20,7 @@ router.get("/user", categoryController.getUsersCategories);
 ////////////
 // Update //
 ////////////
-// router.put("/:id", categoryController.updateCategory);
+router.put("/:id", categoryController.updateCategory);
 
 ////////////
 // Delete //

@@ -18,7 +18,7 @@ router.get("/user/", taskController.getUsersTasks);
 ////////////
 // Update //
 ////////////
-// router.put("/:id", taskController.updateTask);
+router.put("/:id", taskController.updateTask);
 
 ////////////
 // Delete //
