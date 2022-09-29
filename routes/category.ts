@@ -26,6 +26,6 @@ router.put("/:id", categoryController.updateCategory);
 // Delete //
 ////////////
 // Cascading deletes all data related to a category (i.e tasks)
-// router.delete("/:id", categoryController.deleteCategory);
+router.delete("/:id", categoryController.deleteCategory);
 
 export = router;
