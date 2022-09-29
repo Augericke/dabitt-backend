@@ -23,6 +23,6 @@ router.put("/:id", taskController.updateTask);
 ////////////
 // Delete //
 ////////////
-// router.delete("/:id", taskController.deleteTask);
+router.delete("/:id", taskController.deleteTask);
 
 export = router;
