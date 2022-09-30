@@ -46,7 +46,7 @@ const getUsersTasks = async (req: Request, res: Response) => {
 };
 
 const updateTask = async (req: Request, res: Response) => {
-  const { description, categoryId, completedAt } = req.body;
+  const { description, categoryId, completedAt, estimateMinutes } = req.body;
   const { id } = req.params;
 
   const updatedTask = await prisma.task.update({
@@ -57,9 +57,9 @@ const updateTask = async (req: Request, res: Response) => {
       description,
       categoryId,
       completedAt,
+      estimateMinutes,
     },
   });
-
   res.json(updatedTask);
 };
 
