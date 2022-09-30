@@ -40,15 +40,16 @@ model Category {
 
 // TODO: add sub tasks using self reference
 model Task {
-  id          String    @id @default(uuid())
-  description String
-  createdAt   DateTime  @default(now())
-  completedAt DateTime?
-  updatedAt   DateTime  @updatedAt
-  creator     User      @relation(fields: [userId], references: [id])
-  userId      String
-  category    Category  @relation(fields: [categoryId], references: [id])
-  categoryId  String
+  id              String    @id @default(uuid())
+  description     String
+  createdAt       DateTime  @default(now())
+  completedAt     DateTime?
+  updatedAt       DateTime  @updatedAt
+  estimateMinutes Int       @default(15)
+  creator         User      @relation(fields: [userId], references: [id])
+  userId          String
+  category        Category  @relation(fields: [categoryId], references: [id])
+  categoryId      String
 }
 
 enum Theme {

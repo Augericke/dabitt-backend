@@ -44,6 +44,7 @@ const getUsersCategories = async (req: Request, res: Response) => {
           description: true,
           createdAt: true,
           completedAt: true,
+          estimateMinutes: true,
         },
       },
     },

@@ -3,7 +3,7 @@ import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createTask = async (req: Request, res: Response) => {
-  const { description, categoryId } = req.body;
+  const { description, categoryId, estimateMinutes } = req.body;
   const userId = getUserId(req);
 
   const newTask = await prisma.task.create({
@@ -11,6 +11,7 @@ const createTask = async (req: Request, res: Response) => {
       userId,
       categoryId,
       description,
+      estimateMinutes,
     },
   });
 

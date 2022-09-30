@@ -37,6 +37,7 @@ CREATE TABLE "Task" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedAt" TIMESTAMP(3),
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "estimateMinutes" INTEGER NOT NULL DEFAULT 15,
     "userId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
 
