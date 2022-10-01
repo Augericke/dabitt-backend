@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Theme" AS ENUM ('light', 'dark', 'lobby');
 
+-- CreateEnum
+CREATE TYPE "CategoryColor" AS ENUM ('default', 'forest', 'coffee', 'blush', 'tan', 'space', 'steel', 'copper', 'pinecone');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -23,6 +26,7 @@ CREATE TABLE "UserPreference" (
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "iconColor" "CategoryColor" NOT NULL DEFAULT 'default',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,

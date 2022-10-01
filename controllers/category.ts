@@ -38,6 +38,7 @@ const getUsersCategories = async (req: Request, res: Response) => {
     select: {
       id: true,
       name: true,
+      iconColor: true,
       tasks: {
         select: {
           id: true,
@@ -56,7 +57,7 @@ const getUsersCategories = async (req: Request, res: Response) => {
 };
 
 const updateCategory = async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, iconColor } = req.body;
   const { id } = req.params;
 
   const updatedCategory = await prisma.category.update({
@@ -65,6 +66,7 @@ const updateCategory = async (req: Request, res: Response) => {
     },
     data: {
       name,
+      iconColor,
     },
   });
 
