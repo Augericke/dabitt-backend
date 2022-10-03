@@ -2,7 +2,7 @@
 CREATE TYPE "Theme" AS ENUM ('light', 'dark', 'lobby');
 
 -- CreateEnum
-CREATE TYPE "CategoryColor" AS ENUM ('default', 'forest', 'coffee', 'blush', 'tan', 'space', 'steel', 'copper', 'pinecone');
+CREATE TYPE "CategoryColor" AS ENUM ('default', 'default_secondary', 'forest', 'coffee', 'blush', 'tan', 'space', 'steel', 'copper', 'pine_cone');
 
 -- CreateTable
 CREATE TABLE "User" (

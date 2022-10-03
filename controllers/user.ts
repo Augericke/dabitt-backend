@@ -34,20 +34,6 @@ const createUser = async (req: Request, res: Response) => {
   res.json(newUser);
 };
 
-const getUsers = async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany({
-    include: {
-      userPreference: {
-        select: {
-          id: true,
-          preferedTheme: true,
-        },
-      },
-    },
-  });
-  res.json(users);
-};
-
 const getUser = async (req: Request, res: Response) => {
   const userId = getUserId(req);
 
@@ -141,7 +127,6 @@ const deleteUser = async (req: Request, res: Response) => {
 
 export default {
   createUser,
-  getUsers,
   getUser,
   getUserPreference,
   updateUser,

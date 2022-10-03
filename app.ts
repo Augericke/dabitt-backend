@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import cors from "cors";
 import { unknownEndpoint, errorHandler } from "./utils/errorHandlers";
 import { checkJwt } from "./utils/auth0";
 
+require("express-async-errors");
 import userRouter from "./routes/user";
 import categoryRouter from "./routes/category";
 import taskRouter from "./routes/task";

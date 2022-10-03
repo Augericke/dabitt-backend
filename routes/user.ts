@@ -13,12 +13,9 @@ router.post("/", checkJwt, userController.createUser);
 //////////
 // Read //
 //////////
-// Get all users and their preferences
-// router.get("/", userController.getUsers);
-router.get("/", userController.getUsers);
 
 // Get specific user information and their preferences
-// router.get("/user", userController.getUser);
+router.get("/user", userController.getUser);
 
 // Get just a users preferences
 router.get("/preference/:id", userController.getUserPreference);
@@ -29,12 +26,10 @@ router.get("/preference/:id", userController.getUserPreference);
 // Update users name
 router.put("/", checkJwt, userController.updateUser);
 
-// Update users preferences
-
 ////////////
 // Delete //
 ////////////
 // Cascading deletes all data related to a user (i.e preferences / categories / tasks / etc...)
-// router.delete("/:id", userController.deleteUser);
+router.delete("/", userController.deleteUser);
 
 export = router;

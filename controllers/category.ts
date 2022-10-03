@@ -59,10 +59,11 @@ const getUsersCategories = async (req: Request, res: Response) => {
 const updateCategory = async (req: Request, res: Response) => {
   const { name, iconColor } = req.body;
   const { id } = req.params;
+  const userId = getUserId(req);
 
   const updatedCategory = await prisma.category.update({
     where: {
-      id,
+      id_userId: { id, userId },
     },
     data: {
       name,
@@ -75,16 +76,19 @@ const updateCategory = async (req: Request, res: Response) => {
 
 const deleteCategory = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const userId = getUserId(req);
 
   const deletedTasks = prisma.task.deleteMany({
     where: {
       categoryId: id,
+      userId,
     },
   });
 
   const deletedCategories = prisma.category.deleteMany({
     where: {
       id,
+      userId,
     },
   });
 

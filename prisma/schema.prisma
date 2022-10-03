@@ -36,7 +36,7 @@ model Category {
   creator   User          @relation(fields: [userId], references: [id])
   userId    String
 
-  @@unique([userId, name])
+  @@unique([id, userId])
 }
 
 // TODO: add sub tasks using self reference
@@ -51,6 +51,8 @@ model Task {
   userId          String
   category        Category  @relation(fields: [categoryId], references: [id])
   categoryId      String
+
+  @@unique([id, userId])
 }
 
 enum Theme {

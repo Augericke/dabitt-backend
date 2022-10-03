@@ -11,8 +11,6 @@ router.post("/", taskController.createTask);
 //////////
 // Read //
 //////////
-// router.get("/", taskController.getTasks);
-// router.get("/:id", taskController.getTask);
 router.get("/user/", taskController.getUsersTasks);
 
 ////////////

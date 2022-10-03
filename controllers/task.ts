@@ -18,22 +18,6 @@ const createTask = async (req: Request, res: Response) => {
   res.json(newTask);
 };
 
-const getTasks = async (req: Request, res: Response) => {
-  const tasks = await prisma.task.findMany({});
-  res.json(tasks);
-};
-
-const getTask = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  const task = await prisma.task.findUnique({
-    where: {
-      id,
-    },
-  });
-  res.json(task);
-};
-
 const getUsersTasks = async (req: Request, res: Response) => {
   const userId = getUserId(req);
 
@@ -48,10 +32,11 @@ const getUsersTasks = async (req: Request, res: Response) => {
 const updateTask = async (req: Request, res: Response) => {
   const { description, categoryId, completedAt, estimateMinutes } = req.body;
   const { id } = req.params;
+  const userId = getUserId(req);
 
   const updatedTask = await prisma.task.update({
     where: {
-      id,
+      id_userId: { id, userId },
     },
     data: {
       description,
@@ -65,10 +50,12 @@ const updateTask = async (req: Request, res: Response) => {
 
 const deleteTask = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const userId = getUserId(req);
 
   const deletedTasks = await prisma.task.deleteMany({
     where: {
       id,
+      userId,
     },
   });
 
@@ -77,8 +64,6 @@ const deleteTask = async (req: Request, res: Response) => {
 
 export default {
   createTask,
-  getTasks,
-  getTask,
   getUsersTasks,
   updateTask,
   deleteTask,
