@@ -3,13 +3,14 @@ import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createCategory = async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, iconColor } = req.body;
   const userId = getUserId(req);
 
   const newCategory = await prisma.category.create({
     data: {
       userId,
       name,
+      iconColor,
     },
   });
 
