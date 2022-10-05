@@ -30,7 +30,8 @@ const getUsersTasks = async (req: Request, res: Response) => {
 };
 
 const updateTask = async (req: Request, res: Response) => {
-  const { description, categoryId, completedAt, estimateMinutes } = req.body;
+  const { description, categoryId, completedAt, estimateMinutes, startAt } =
+    req.body;
   const { id } = req.params;
   const userId = getUserId(req);
 
@@ -43,6 +44,7 @@ const updateTask = async (req: Request, res: Response) => {
       categoryId,
       completedAt,
       estimateMinutes,
+      startAt,
     },
   });
   res.json(updatedTask);
