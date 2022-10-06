@@ -15,7 +15,7 @@ router.post("/", categoryController.createCategory);
 // router.get("/:id", categoryController.getCategory);
 
 // Get all categories and tasks for a specific user
-router.get("/user", categoryController.getUsersCategories);
+router.get("/task", categoryController.getCategoryTasks);
 
 ////////////
 // Update //

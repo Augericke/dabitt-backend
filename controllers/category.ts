@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { start } from "repl";
 import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
@@ -33,29 +34,90 @@ const getCategory = async (req: Request, res: Response) => {
   res.json(category);
 };
 
-const getUsersCategories = async (req: Request, res: Response) => {
+const getCategoryTasks = async (req: Request, res: Response) => {
+  const startTime = new Date(req.query.startTime as string);
+  const endTime = new Date(req.query.endTime as string);
+  const isFuture = parseInt(req.query.isFuture as string) || 0;
+  const isCurrent = parseInt(req.query.isCurrent as string) || 0;
+
   const userId = getUserId(req);
-  const usersCategories = await prisma.category.findMany({
-    select: {
-      id: true,
-      name: true,
-      iconColor: true,
-      tasks: {
-        select: {
-          id: true,
-          description: true,
-          createdAt: true,
-          completedAt: true,
-          startAt: true,
-          estimateMinutes: true,
+
+  if (startTime && endTime) {
+    // Filter tasks based on whether current day or not
+    let taskFilter;
+    if (isCurrent) {
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+        {
+          completedAt: null,
+          startAt: {
+            lt: endTime,
+          },
+        },
+        {
+          completedAt: null,
+          startAt: null,
+        },
+      ];
+    } else if (isFuture) {
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+        {
+          completedAt: null,
+          startAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+      ];
+    } else {
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+      ];
+    }
+
+    // Include unfinished tasks except those with a later startAt
+    const usersCategories = await prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        iconColor: true,
+        tasks: {
+          select: {
+            id: true,
+            description: true,
+            createdAt: true,
+            completedAt: true,
+            startAt: true,
+            estimateMinutes: true,
+          },
+          where: {
+            OR: taskFilter,
+          },
         },
       },
-    },
-    where: {
-      userId,
-    },
-  });
-  res.json(usersCategories);
+      where: {
+        userId,
+      },
+    });
+
+    res.json(usersCategories);
+  }
 };
 
 const updateCategory = async (req: Request, res: Response) => {
@@ -107,7 +169,7 @@ const deleteCategory = async (req: Request, res: Response) => {
 export default {
   createCategory,
   getCategories,
-  getUsersCategories,
+  getCategoryTasks,
   getCategory,
   updateCategory,
   deleteCategory,
