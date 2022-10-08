@@ -17,7 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/api/user", checkJwt, userRouter);
 app.use("/api/category", checkJwt, categoryRouter);
-app.use("/api/task", checkJwt, taskRouter);
+app.use("/api/category/:categoryId/task", checkJwt, taskRouter);
 
 // Error Handling
 app.use(unknownEndpoint);

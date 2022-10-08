@@ -3,7 +3,8 @@ import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createTask = async (req: Request, res: Response) => {
-  const { description, categoryId, estimateMinutes } = req.body;
+  const { description, estimateMinutes, startAt } = req.body;
+  const { categoryId } = req.params;
   const userId = getUserId(req);
 
   const newTask = await prisma.task.create({
@@ -12,26 +13,29 @@ const createTask = async (req: Request, res: Response) => {
       categoryId,
       description,
       estimateMinutes,
+      startAt,
     },
   });
 
   res.json(newTask);
 };
 
-const getUsersTasks = async (req: Request, res: Response) => {
+const getTasks = async (req: Request, res: Response) => {
+  const { categoryId } = req.params;
   const userId = getUserId(req);
 
-  const usersTasks = await prisma.task.findMany({
+  const tasks = await prisma.task.findMany({
     where: {
       userId,
+      categoryId,
     },
   });
-  res.json(usersTasks);
+  res.json(tasks);
 };
 
 const updateTask = async (req: Request, res: Response) => {
-  const { description, categoryId, completedAt, estimateMinutes, startAt } =
-    req.body;
+  const { categoryId } = req.params;
+  const { description, completedAt, estimateMinutes, startAt } = req.body;
   const { id } = req.params;
   const userId = getUserId(req);
 
@@ -66,7 +70,7 @@ const deleteTask = async (req: Request, res: Response) => {
 
 export default {
   createTask,
-  getUsersTasks,
+  getTasks,
   updateTask,
   deleteTask,
 };

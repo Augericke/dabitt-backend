@@ -1,7 +1,7 @@
 import express from "express";
 import taskController from "../controllers/task";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 ////////////
 // Create //
@@ -11,7 +11,7 @@ router.post("/", taskController.createTask);
 //////////
 // Read //
 //////////
-router.get("/user/", taskController.getUsersTasks);
+router.get("/", taskController.getTasks);
 
 ////////////
 // Update //

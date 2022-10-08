@@ -19,7 +19,17 @@ const createCategory = async (req: Request, res: Response) => {
 };
 
 const getCategories = async (req: Request, res: Response) => {
-  const categories = await prisma.category.findMany({});
+  const userId = getUserId(req);
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+      iconColor: true,
+    },
+    where: {
+      userId,
+    },
+  });
   res.json(categories);
 };
 
