@@ -22,12 +22,77 @@ const createTask = async (req: Request, res: Response) => {
 
 const getTasks = async (req: Request, res: Response) => {
   const { categoryId } = req.params;
+  const startTime = new Date(req.query.startTime as string);
+  const endTime = new Date(req.query.endTime as string);
+  const displayType = req.query.displayType as string;
   const userId = getUserId(req);
+
+  let taskFilter;
+  switch (displayType) {
+    case "current":
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+        // Show all uncompleted tasks that have started at before end time
+        {
+          completedAt: null,
+          startAt: {
+            lt: endTime,
+          },
+        },
+        {
+          completedAt: null,
+          startAt: null,
+        },
+      ];
+      break;
+    case "future":
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+        {
+          completedAt: null,
+          startAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+      ];
+      break;
+    case "past":
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+      ];
+      break;
+    default:
+      taskFilter = [
+        {
+          completedAt: {
+            gte: startTime,
+            lte: endTime,
+          },
+        },
+      ];
+  }
 
   const tasks = await prisma.task.findMany({
     where: {
       userId,
       categoryId,
+      OR: taskFilter,
     },
   });
   res.json(tasks);
