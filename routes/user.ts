@@ -7,23 +7,16 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-// Create new user with default preferences
 router.post("/", checkJwt, userController.createUser);
 
 //////////
 // Read //
 //////////
-
-// Get specific user information and their preferences
-router.get("/user", userController.getUser);
-
-// Get just a users preferences
-router.get("/preference/:id", userController.getUserPreference);
+router.get("/", userController.getUser);
 
 ////////////
 // Update //
 ////////////
-// Update users name
 router.put("/", checkJwt, userController.updateUser);
 
 ////////////

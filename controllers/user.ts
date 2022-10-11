@@ -19,7 +19,7 @@ const createUser = async (req: Request, res: Response) => {
         createMany: {
           data: [
             { name: "personal", iconColor: "default" },
-            { name: "work", iconColor: "forest" },
+            { name: "work", iconColor: "default_secondary" },
           ],
         },
       },

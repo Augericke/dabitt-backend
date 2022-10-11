@@ -1,12 +1,13 @@
 -- CreateEnum
-CREATE TYPE "Theme" AS ENUM ('light', 'dark', 'lobby');
+CREATE TYPE "Theme" AS ENUM ('light', 'dark', 'lobby', 'sea', 'cappuccino');
 
 -- CreateEnum
-CREATE TYPE "CategoryColor" AS ENUM ('default', 'default_secondary', 'forest', 'coffee', 'blush', 'tan', 'space', 'steel', 'copper', 'pine_cone');
+CREATE TYPE "CategoryColor" AS ENUM ('default', 'default_secondary', 'forest', 'tan', 'space', 'steel', 'copper', 'pine_cone');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedSetup" BOOLEAN NOT NULL DEFAULT false,
     "username" TEXT NOT NULL,
 
@@ -18,6 +19,7 @@ CREATE TABLE "UserPreference" (
     "id" TEXT NOT NULL,
     "preferedTheme" "Theme" NOT NULL DEFAULT 'light',
     "userId" TEXT NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserPreference_pkey" PRIMARY KEY ("id")
 );
@@ -41,6 +43,7 @@ CREATE TABLE "Task" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedAt" TIMESTAMP(3),
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "startAt" TIMESTAMP(3),
     "estimateMinutes" INTEGER NOT NULL DEFAULT 15,
     "userId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
@@ -52,7 +55,10 @@ CREATE TABLE "Task" (
 CREATE UNIQUE INDEX "UserPreference_userId_key" ON "UserPreference"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Category_userId_name_key" ON "Category"("userId", "name");
+CREATE UNIQUE INDEX "Category_id_userId_key" ON "Category"("id", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Task_id_userId_key" ON "Task"("id", "userId");
 
 -- AddForeignKey
 ALTER TABLE "UserPreference" ADD CONSTRAINT "UserPreference_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
