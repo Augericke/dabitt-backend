@@ -60,6 +60,7 @@ enum Theme {
   light
   dark
   lobby
+  sea
 }
 
 enum CategoryColor {
