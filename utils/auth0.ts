@@ -13,7 +13,7 @@ export const checkReadMessage = requiredScopes("read:messages");
 
 export const getUserId = (req: Request) => {
   if (req.auth) {
-    return req.auth.payload.sub!.replace("|", "-");
+    return req.auth.payload.sub!;
   }
 
   return "";

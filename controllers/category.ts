@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { start } from "repl";
 import { getUserId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
@@ -152,28 +151,13 @@ const deleteCategory = async (req: Request, res: Response) => {
   const { id } = req.params;
   const userId = getUserId(req);
 
-  const deletedTasks = prisma.task.deleteMany({
-    where: {
-      categoryId: id,
-      userId,
-    },
-  });
-
-  const deletedCategories = prisma.category.deleteMany({
+  const deletedCategories = await prisma.category.deleteMany({
     where: {
       id,
       userId,
     },
   });
-
-  // In the future this cascading delete could be done by setting referential actions https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-actions
-  // however, at the moment this feature is still just in preview
-  const transaction = await prisma.$transaction([
-    deletedTasks,
-    deletedCategories,
-  ]);
-
-  res.json(transaction);
+  res.json(deletedCategories);
 };
 
 export default {

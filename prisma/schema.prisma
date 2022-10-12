@@ -23,7 +23,7 @@ model User {
 model UserPreference {
   id            String   @id @default(uuid())
   preferedTheme Theme    @default(light)
-  user          User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String   @unique
   updatedAt     DateTime @updatedAt
 }
@@ -35,7 +35,7 @@ model Category {
   iconColor CategoryColor @default(default)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  creator   User          @relation(fields: [userId], references: [id])
+  creator   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
   @@unique([id, userId])
@@ -50,9 +50,9 @@ model Task {
   updatedAt       DateTime  @updatedAt
   startAt         DateTime?
   estimateMinutes Int       @default(15)
-  creator         User      @relation(fields: [userId], references: [id])
+  creator         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  category        Category  @relation(fields: [categoryId], references: [id])
+  category        Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId      String
 
   @@unique([id, userId])

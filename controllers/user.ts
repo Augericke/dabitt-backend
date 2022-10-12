@@ -6,6 +6,7 @@ const createUser = async (req: Request, res: Response) => {
   const { username } = req.body;
   const userId = getUserId(req);
 
+  //TODO: look into unique constraint error
   const newUser = await prisma.user.upsert({
     where: {
       id: userId,
@@ -88,41 +89,13 @@ const updateUser = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
   const userId = getUserId(req);
-
-  const deletedTasks = prisma.category.deleteMany({
-    where: {
-      userId,
-    },
-  });
-
-  const deletedCategories = prisma.category.deleteMany({
-    where: {
-      userId,
-    },
-  });
-
-  const deletedPreferences = prisma.userPreference.delete({
-    where: {
-      userId,
-    },
-  });
-
-  const deletedUser = prisma.user.delete({
+  const deletedUser = await prisma.user.delete({
     where: {
       id: userId,
     },
   });
 
-  // In the future this cascading delete could be done by setting referential actions https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-actions
-  // however, at the moment this feature is still just in preview
-  const transaction = await prisma.$transaction([
-    deletedTasks,
-    deletedCategories,
-    deletedPreferences,
-    deletedUser,
-  ]);
-
-  res.json(transaction);
+  res.json(deletedUser);
 };
 
 export default {
