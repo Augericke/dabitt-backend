@@ -47,29 +47,10 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
 };
 
 const getWeekCompleted = async (req: Request, res: Response) => {
-  const categoryId = req.query.categoryId as string;
   const userId = getUserId(req);
 
-  let aggregatedData;
-  if (categoryId) {
-    aggregatedData = await prisma.$queryRaw(
-      Prisma.sql`
-    SELECT
-      "categoryId",
-      DATE("completedAt") AS day,
-      SUM("estimateMinutes") AS value
-    FROM "Task"
-    WHERE
-      DATE("completedAt") IS NOT NULL
-      AND "completedAt" >= CURRENT_DATE - interval '6 day'
-      AND "categoryId" = ${categoryId}
-      AND "userId" = ${userId}
-    GROUP BY "categoryId", "day"
-    `,
-    );
-  } else {
-    aggregatedData = await prisma.$queryRaw(
-      Prisma.sql`
+  const aggregatedData = await prisma.$queryRaw(
+    Prisma.sql`
     SELECT
       "categoryId",
       DATE("completedAt") AS day,
@@ -80,9 +61,9 @@ const getWeekCompleted = async (req: Request, res: Response) => {
       AND "completedAt" >= CURRENT_DATE - interval '6 day'
       AND "userId" = ${userId}
     GROUP BY "categoryId", "day"
+    ORDER BY day
     `,
-    );
-  }
+  );
 
   const jsonData = JSON.stringify(aggregatedData, (key, value) =>
     typeof value === "bigint" ? value.toString() : value,
