@@ -12,19 +12,22 @@ datasource db {
 
 model User {
   id             String          @id @default(uuid())
+  authId         String          @unique
   createdAt      DateTime        @default(now())
   completedSetup Boolean         @default(false)
   username       String
   userPreference UserPreference?
   tasks          Task[]
   categories     Category[]
+
+  @@unique([id, authId])
 }
 
 model UserPreference {
   id            String   @id @default(uuid())
   preferedTheme Theme    @default(light)
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String   @unique
+  user          User     @relation(fields: [authId], references: [authId], onDelete: Cascade)
+  authId        String   @unique
   updatedAt     DateTime @updatedAt
 }
 
@@ -35,10 +38,10 @@ model Category {
   iconColor CategoryColor @default(default)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
-  creator   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  creator   User          @relation(fields: [authId], references: [authId], onDelete: Cascade)
+  authId    String
 
-  @@unique([id, userId])
+  @@unique([id, authId])
 }
 
 // TODO: add sub tasks using self reference
@@ -50,12 +53,12 @@ model Task {
   updatedAt       DateTime  @updatedAt
   startAt         DateTime?
   estimateMinutes Int       @default(15)
-  creator         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
+  creator         User      @relation(fields: [authId], references: [authId], onDelete: Cascade)
+  authId          String
   category        Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId      String
 
-  @@unique([id, userId])
+  @@unique([id, authId])
 }
 
 enum Theme {

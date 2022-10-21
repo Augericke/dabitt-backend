@@ -1,19 +1,18 @@
 import { Request, Response } from "express";
-import { getUserId } from "../utils/auth0";
+import { getAuthId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
-const createUser = async (req: Request, res: Response) => {
+const createOrConnectUser = async (req: Request, res: Response) => {
   const { username } = req.body;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
-  //TODO: look into unique constraint error
   const newUser = await prisma.user.upsert({
     where: {
-      id: userId,
+      authId,
     },
     update: {},
     create: {
-      id: userId,
+      authId,
       completedSetup: false,
       username,
       categories: {
@@ -36,7 +35,7 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 const getUser = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const user = await prisma.user.findUnique({
     include: {
@@ -47,18 +46,18 @@ const getUser = async (req: Request, res: Response) => {
       },
     },
     where: {
-      id: userId,
+      authId,
     },
   });
   res.json(user);
 };
 
 const getUserPreference = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const preference = await prisma.userPreference.findUnique({
     where: {
-      id: userId,
+      authId,
     },
   });
 
@@ -67,11 +66,11 @@ const getUserPreference = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   const { completedSetup, username, preferedTheme } = req.body;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const updatedUser = await prisma.user.update({
     where: {
-      id: userId,
+      authId,
     },
     data: {
       completedSetup,
@@ -88,10 +87,10 @@ const updateUser = async (req: Request, res: Response) => {
 };
 
 const deleteUser = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
   const deletedUser = await prisma.user.delete({
     where: {
-      id: userId,
+      authId,
     },
   });
 
@@ -99,7 +98,7 @@ const deleteUser = async (req: Request, res: Response) => {
 };
 
 export default {
-  createUser,
+  createOrConnectUser,
   getUser,
   getUserPreference,
   updateUser,

@@ -1,11 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
-import { getUserId } from "../utils/auth0";
+import { getAuthId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const getCalendarCompleted = async (req: Request, res: Response) => {
   const categoryId = req.query.categoryId as string;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   // TODO: Look into a more dry solution for dynamic query params within prisma
   let aggregatedData;
@@ -20,7 +20,7 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
       DATE("completedAt") IS NOT NULL
       AND "completedAt" >= CURRENT_DATE - interval '182 day'
       AND "categoryId" = ${categoryId}
-      AND "userId" = ${userId}
+      AND "authId" = ${authId}
     GROUP BY day
     `,
     );
@@ -34,7 +34,7 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
     WHERE
       DATE("completedAt") IS NOT NULL
       AND "completedAt" >= CURRENT_DATE - interval '182 day'
-      AND "userId" = ${userId}
+      AND "authId" = ${authId}
     GROUP BY day
     `,
     );
@@ -47,7 +47,7 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
 };
 
 const getWeekCompleted = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const aggregatedData = await prisma.$queryRaw(
     Prisma.sql`
@@ -59,7 +59,7 @@ const getWeekCompleted = async (req: Request, res: Response) => {
     WHERE
       DATE("completedAt") IS NOT NULL
       AND "completedAt" >= CURRENT_DATE - interval '6 day'
-      AND "userId" = ${userId}
+      AND "authId" = ${authId}
     GROUP BY "categoryId", "day"
     ORDER BY day
     `,

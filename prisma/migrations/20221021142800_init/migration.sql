@@ -6,7 +6,7 @@ CREATE TYPE "CategoryColor" AS ENUM ('default', 'default_secondary', 'forest', '
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" CHAR(30) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedSetup" BOOLEAN NOT NULL DEFAULT false,
     "username" TEXT NOT NULL,

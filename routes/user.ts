@@ -7,7 +7,7 @@ const router = express.Router();
 ////////////
 // Create //
 ////////////
-router.post("/", checkJwt, userController.createUser);
+router.post("/", checkJwt, userController.createOrConnectUser);
 
 //////////
 // Read //

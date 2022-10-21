@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { getUserId } from "../utils/auth0";
+import { getAuthId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createCategory = async (req: Request, res: Response) => {
   const { name, iconColor } = req.body;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const newCategory = await prisma.category.create({
     data: {
-      userId,
+      authId,
       name,
       iconColor,
     },
@@ -18,7 +18,7 @@ const createCategory = async (req: Request, res: Response) => {
 };
 
 const getCategories = async (req: Request, res: Response) => {
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
   const categories = await prisma.category.findMany({
     select: {
       id: true,
@@ -26,21 +26,10 @@ const getCategories = async (req: Request, res: Response) => {
       iconColor: true,
     },
     where: {
-      userId,
+      authId,
     },
   });
   res.json(categories);
-};
-
-const getCategory = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  const category = await prisma.category.findUnique({
-    where: {
-      id,
-    },
-  });
-  res.json(category);
 };
 
 const getCategoryTasks = async (req: Request, res: Response) => {
@@ -49,7 +38,7 @@ const getCategoryTasks = async (req: Request, res: Response) => {
   const isFuture = parseInt(req.query.isFuture as string) || 0;
   const isCurrent = parseInt(req.query.isCurrent as string) || 0;
 
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   if (startTime && endTime) {
     // Filter tasks based on whether current day or not
@@ -121,7 +110,7 @@ const getCategoryTasks = async (req: Request, res: Response) => {
         },
       },
       where: {
-        userId,
+        authId,
       },
     });
 
@@ -132,11 +121,11 @@ const getCategoryTasks = async (req: Request, res: Response) => {
 const updateCategory = async (req: Request, res: Response) => {
   const { name, iconColor } = req.body;
   const { id } = req.params;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const updatedCategory = await prisma.category.update({
     where: {
-      id_userId: { id, userId },
+      id_authId: { id, authId },
     },
     data: {
       name,
@@ -149,12 +138,12 @@ const updateCategory = async (req: Request, res: Response) => {
 
 const deleteCategory = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const deletedCategories = await prisma.category.deleteMany({
     where: {
       id,
-      userId,
+      authId,
     },
   });
   res.json(deletedCategories);
@@ -164,7 +153,6 @@ export default {
   createCategory,
   getCategories,
   getCategoryTasks,
-  getCategory,
   updateCategory,
   deleteCategory,
 };

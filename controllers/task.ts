@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { getUserId } from "../utils/auth0";
+import { getAuthId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createTask = async (req: Request, res: Response) => {
   const { description, estimateMinutes, startAt } = req.body;
   const { categoryId } = req.params;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const newTask = await prisma.task.create({
     data: {
-      userId,
+      authId,
       categoryId,
       description,
       estimateMinutes,
@@ -25,7 +25,7 @@ const getTasks = async (req: Request, res: Response) => {
   const startTime = new Date(req.query.startTime as string);
   const endTime = new Date(req.query.endTime as string);
   const displayType = req.query.displayType as string;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   let taskFilter;
   switch (displayType) {
@@ -90,7 +90,7 @@ const getTasks = async (req: Request, res: Response) => {
 
   const tasks = await prisma.task.findMany({
     where: {
-      userId,
+      authId,
       categoryId,
       OR: taskFilter,
     },
@@ -102,11 +102,11 @@ const updateTask = async (req: Request, res: Response) => {
   const { categoryId } = req.params;
   const { description, completedAt, estimateMinutes, startAt } = req.body;
   const { id } = req.params;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const updatedTask = await prisma.task.update({
     where: {
-      id_userId: { id, userId },
+      id_authId: { id, authId },
     },
     data: {
       description,
@@ -121,12 +121,12 @@ const updateTask = async (req: Request, res: Response) => {
 
 const deleteTask = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const userId = getUserId(req);
+  const authId = getAuthId(req);
 
   const deletedTasks = await prisma.task.deleteMany({
     where: {
       id,
-      userId,
+      authId,
     },
   });
 

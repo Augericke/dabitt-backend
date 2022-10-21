@@ -11,7 +11,7 @@ export const checkJwt = auth({
 
 export const checkReadMessage = requiredScopes("read:messages");
 
-export const getUserId = (req: Request) => {
+export const getAuthId = (req: Request) => {
   if (req.auth) {
     return req.auth.payload.sub!;
   }
