@@ -5,20 +5,19 @@ import prisma from "../utils/prisma";
 
 const getCalendarCompleted = async (req: Request, res: Response) => {
   const categoryId = req.query.categoryId as string;
+  const tz = req.query.tz as string;
   const authId = getAuthId(req);
 
-  // TODO: Look into a more dry solution for dynamic query params within prisma
   let aggregatedData;
   if (categoryId) {
     aggregatedData = await prisma.$queryRaw(
       Prisma.sql`
     SELECT
-      DATE("completedAt") AS day,
+      DATE(("completedAt" at time zone 'UTC') at time zone ${tz}) AS day,
       SUM("estimateMinutes") AS value
     FROM "Task"
     WHERE
-      DATE("completedAt") IS NOT NULL
-      AND "completedAt" >= CURRENT_DATE - interval '182 day'
+      ("completedAt" at time zone 'UTC') at time zone ${tz} >= (CURRENT_DATE at time zone 'UTC') at time zone ${tz} - interval '182 day'
       AND "categoryId" = ${categoryId}
       AND "authId" = ${authId}
     GROUP BY day
@@ -28,12 +27,11 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
     aggregatedData = await prisma.$queryRaw(
       Prisma.sql`
     SELECT
-      DATE("completedAt") AS day,
+      DATE(("completedAt" at time zone 'UTC') at time zone ${tz}) AS day,
       SUM("estimateMinutes") AS value
     FROM "Task"
     WHERE
-      DATE("completedAt") IS NOT NULL
-      AND "completedAt" >= CURRENT_DATE - interval '182 day'
+      ("completedAt" at time zone 'UTC') at time zone ${tz} >= (CURRENT_DATE at time zone 'UTC') at time zone ${tz} - interval '182 day'
       AND "authId" = ${authId}
     GROUP BY day
     `,
@@ -43,23 +41,28 @@ const getCalendarCompleted = async (req: Request, res: Response) => {
   const jsonData = JSON.stringify(aggregatedData, (key, value) =>
     typeof value === "bigint" ? value.toString() : value,
   );
+
   return res.send(jsonData);
 };
 
 const getWeekCompleted = async (req: Request, res: Response) => {
   const authId = getAuthId(req);
+  const tz = req.query.tz as string;
 
   const aggregatedData = await prisma.$queryRaw(
     Prisma.sql`
     SELECT
       "categoryId",
-      DATE("completedAt") AS day,
-      SUM("estimateMinutes") AS value
-    FROM "Task"
+      date_trunc('day', cal)::date AS day,
+      coalesce(SUM("estimateMinutes"), 0) AS value
+    FROM generate_series
+      ( (CURRENT_DATE at time zone 'UTC') at time zone ${tz} - interval '6 day'
+      , (CURRENT_DATE at time zone 'UTC') at time zone ${tz}
+      , '1 day'::interval) cal
+    LEFT JOIN "Task" 
+      ON DATE(("completedAt" at time zone 'UTC') at time zone ${tz}) = date_trunc('day', cal)::date
     WHERE
-      DATE("completedAt") IS NOT NULL
-      AND "completedAt" >= CURRENT_DATE - interval '6 day'
-      AND "authId" = ${authId}
+      "authId" = ${authId} OR "authId" IS NULL
     GROUP BY "categoryId", "day"
     ORDER BY day
     `,
@@ -68,6 +71,7 @@ const getWeekCompleted = async (req: Request, res: Response) => {
   const jsonData = JSON.stringify(aggregatedData, (key, value) =>
     typeof value === "bigint" ? value.toString() : value,
   );
+
   return res.send(jsonData);
 };
 
