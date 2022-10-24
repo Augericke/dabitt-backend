@@ -4,6 +4,8 @@
   "description": "Backend for dabitt - the daily habit app",
   "main": "index.ts",
   "scripts": {
+    "build": "tsc --project .",
+    "start": "node ./dist/index.js",
     "devStart": "nodemon index.ts"
   },
   "prisma": {
