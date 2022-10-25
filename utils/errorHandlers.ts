@@ -21,6 +21,8 @@ export const errorHandler = (
     return response.status(400).json({ error: error.message });
   } else if (error.name === "PrismaClientKnownRequestError") {
     return response.status(400).json({ error: error.message });
+  } else if (error.name === "UnauthorizedError") {
+    return response.status(401).json({ error: error.message });
   }
   next(error);
 };
