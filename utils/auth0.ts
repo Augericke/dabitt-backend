@@ -1,12 +1,13 @@
 import { auth } from "express-oauth2-jwt-bearer";
-import { Request, Response } from "express";
+import { Request } from "express";
+import config from "./config";
 import { requiredScopes } from "express-oauth2-jwt-bearer";
 
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 export const checkJwt = auth({
-  audience: "API/dabitt",
-  issuerBaseURL: "https://dev-rhws1iu8.us.auth0.com/",
+  audience: config.auth.audience,
+  issuerBaseURL: config.auth.issuerBaseUrl,
 });
 
 export const checkReadMessage = requiredScopes("read:messages");
