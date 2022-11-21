@@ -57,6 +57,7 @@ model Task {
   authId          String
   category        Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId      String
+  externalURL     String?
 
   @@unique([id, authId])
 }

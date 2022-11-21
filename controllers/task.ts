@@ -3,7 +3,7 @@ import { getAuthId } from "../utils/auth0";
 import prisma from "../utils/prisma";
 
 const createTask = async (req: Request, res: Response) => {
-  const { description, estimateMinutes, startAt } = req.body;
+  const { description, estimateMinutes, externalURL, startAt } = req.body;
   const { categoryId } = req.params;
   const authId = getAuthId(req);
 
@@ -13,6 +13,7 @@ const createTask = async (req: Request, res: Response) => {
       categoryId,
       description,
       estimateMinutes,
+      externalURL,
       startAt,
     },
   });
@@ -100,7 +101,8 @@ const getTasks = async (req: Request, res: Response) => {
 
 const updateTask = async (req: Request, res: Response) => {
   const { categoryId } = req.params;
-  const { description, completedAt, estimateMinutes, startAt } = req.body;
+  const { description, completedAt, estimateMinutes, startAt, externalURL } =
+    req.body;
   const { id } = req.params;
   const authId = getAuthId(req);
 
@@ -114,6 +116,7 @@ const updateTask = async (req: Request, res: Response) => {
       completedAt,
       estimateMinutes,
       startAt,
+      externalURL,
     },
   });
   res.json(updatedTask);

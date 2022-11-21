@@ -6,7 +6,8 @@ CREATE TYPE "CategoryColor" AS ENUM ('default', 'default_secondary', 'forest', '
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" CHAR(30) NOT NULL,
+    "id" TEXT NOT NULL,
+    "authId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedSetup" BOOLEAN NOT NULL DEFAULT false,
     "username" TEXT NOT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE "User" (
 CREATE TABLE "UserPreference" (
     "id" TEXT NOT NULL,
     "preferedTheme" "Theme" NOT NULL DEFAULT 'light',
-    "userId" TEXT NOT NULL,
+    "authId" TEXT NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserPreference_pkey" PRIMARY KEY ("id")
@@ -31,7 +32,7 @@ CREATE TABLE "Category" (
     "iconColor" "CategoryColor" NOT NULL DEFAULT 'default',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" TEXT NOT NULL,
+    "authId" TEXT NOT NULL,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
@@ -45,29 +46,35 @@ CREATE TABLE "Task" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "startAt" TIMESTAMP(3),
     "estimateMinutes" INTEGER NOT NULL DEFAULT 15,
-    "userId" TEXT NOT NULL,
+    "authId" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "Task_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserPreference_userId_key" ON "UserPreference"("userId");
+CREATE UNIQUE INDEX "User_authId_key" ON "User"("authId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Category_id_userId_key" ON "Category"("id", "userId");
+CREATE UNIQUE INDEX "User_id_authId_key" ON "User"("id", "authId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Task_id_userId_key" ON "Task"("id", "userId");
+CREATE UNIQUE INDEX "UserPreference_authId_key" ON "UserPreference"("authId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Category_id_authId_key" ON "Category"("id", "authId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Task_id_authId_key" ON "Task"("id", "authId");
 
 -- AddForeignKey
-ALTER TABLE "UserPreference" ADD CONSTRAINT "UserPreference_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserPreference" ADD CONSTRAINT "UserPreference_authId_fkey" FOREIGN KEY ("authId") REFERENCES "User"("authId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Category" ADD CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Category" ADD CONSTRAINT "Category_authId_fkey" FOREIGN KEY ("authId") REFERENCES "User"("authId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Task" ADD CONSTRAINT "Task_authId_fkey" FOREIGN KEY ("authId") REFERENCES "User"("authId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Task" ADD CONSTRAINT "Task_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
